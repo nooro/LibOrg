@@ -1,6 +1,7 @@
 
 public class Book {
 	
+	private int id;
 	private String title;
 	private String author;
 	private String genre;
@@ -10,7 +11,8 @@ public class Book {
 	
 	
 	//Constructors
-	public Book( String title, String author, String genre, int year, int pages, int amount ) {
+	public Book(int id, String title, String author, String genre, int year, int pages, int amount ) {
+		this.id = id;
 		this.author = author;
 		this.title = title;
 		this.genre = genre;
@@ -26,6 +28,7 @@ public class Book {
 		this.publishingYear = 0;
 		this.pages = 0;
 		this.amount = 0;
+		this.id = 0;
 	}
 
 	//Getters
@@ -35,6 +38,7 @@ public class Book {
 	public int getYear() { return this.publishingYear; }
 	public int getPages() { return this.pages; }
 	public int getAmount() { return this.amount; }
+	public int getID() { return this.id; }
 	
 	//Setters
 	public void setAutor( String autor ) { this.author = autor; }
@@ -42,6 +46,7 @@ public class Book {
 	public void setGenre( String genre ) { this.genre = genre; }
 	public void setPublishingYear( int year ) { this.publishingYear = year; }
 	public void setPages( int pages ) { this.pages = pages; }
-	public void setAmount( int amount ) { this.amount = amount; } 
+	public void setAmount( int amount ) { this.amount = amount; }
+	public void setID( int id ) { this.id = id; }
 	
 }
