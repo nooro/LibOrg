@@ -116,6 +116,7 @@ public class LogInForm {
 				System.out.println(User.isLoggedIn());
 			}
 		});
+		
 		btn_submit.getJButton().addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseEntered(MouseEvent e) {

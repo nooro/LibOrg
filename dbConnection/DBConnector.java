@@ -73,6 +73,8 @@ public class DBConnector {
 			//There is user with that username and password
 			if( result.next() ) {
 				User.logIn(result.getInt("id"), result.getString("username"), result.getString("email"));
+			} else {
+				User.logOut();
 			}
 			
 		} catch (SQLException e) {

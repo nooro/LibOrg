@@ -36,6 +36,12 @@ public class Resources {
 			}
 		}
 		
+		public static class LibraryOrganizer {
+			public static void setUp(JFrame window) {
+				
+			}
+		}
+		
 	}
 	
 	public static class Colors {
