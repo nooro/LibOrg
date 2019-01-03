@@ -1,21 +1,31 @@
+package dbConnection;
+
 import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
+
+import liborg.Book;
+import liborg.User;
 
 public class DBConnector {
 	
 	private Connection connection;
 	
+	private boolean isConnected;
+	
 	public DBConnector(String dbDriver, String url, String user, String password) {
 		try {
 			Class.forName(dbDriver);
 			connection = DriverManager.getConnection(url, user, password);
+			this.isConnected = true;
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			this.isConnected = false;
 		} catch (SQLException e) {
-			e.printStackTrace();
+			this.isConnected = false;
 		}
 	}
+	
+	public boolean isConnected() { return this.isConnected; }
 	
 	public List<Book> search(String searchString) {
 		Statement statement;
@@ -51,6 +61,22 @@ public class DBConnector {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public void logIn(String username, String password) {
+		try {
+			Statement statement = connection.createStatement();
+			String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "';";
+			ResultSet result = statement.executeQuery(query);
+			
+			//There is user with that username and password
+			if( result.next() ) {
+				User.logIn(result.getInt("id"), result.getString("username"), result.getString("email"));
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 	

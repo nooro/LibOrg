@@ -1,4 +1,4 @@
-package UI;
+package ui;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -98,7 +98,7 @@ public class RegistrationForm {
 	    window.add(tf_email.getJTextField());
 
 	    //Set up the submit button
-	    btn_submit = new Button("REGISTRATION", Resources.Fonts.Registration.button, Resources.Colors.white, Resources.Colors.orange);
+	    btn_submit = new Button("REGISTER", Resources.Fonts.Registration.button, Resources.Colors.white, Resources.Colors.orange);
 	    btn_submit.getJButton().setSize((int) (btn_submit.getSize().width * 1.2), btn_submit.getSize().height*2);
 	    btn_submit.getJButton().setLocation( (int) (window.getWidth()/2 - btn_submit.getJButton().getSize().width/2), 
 	    									(int)( (tf_email.getJTextField().getBounds().y + tf_email.getJTextField().getBounds().height) + (window.getHeight()*0.03)) );
@@ -119,9 +119,10 @@ public class RegistrationForm {
 		btn_submit.getJButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println(tf_username.getJTextField().getText());
+				
 			}
 		});
+		
 		btn_submit.getJButton().addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseEntered(MouseEvent e) {
@@ -134,7 +135,8 @@ public class RegistrationForm {
 		loginLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				
+				LogInForm loginForm = new LogInForm();
+				window.setVisible(false);
 	        }
 
 	        @Override
