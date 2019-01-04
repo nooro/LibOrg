@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time:  3 яну 2019 в 01:03
+-- Generation Time:  4 яну 2019 в 22:05
 -- Версия на сървъра: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `library`
 --
+CREATE DATABASE IF NOT EXISTS `library` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `library`;
 
 -- --------------------------------------------------------
 
@@ -67,7 +69,10 @@ CREATE TABLE `users` (
 INSERT INTO `users` (`id`, `username`, `password`, `email`) VALUES
 (1, 'Dancheff', 'pass', 'georgi.dancheff@gmail.com'),
 (2, 'Georgi', 'secret', 'georgi_danchev@abv.bg'),
-(3, 'nooro', 'secret_pass', 'georgi_dancheff');
+(3, 'nooro', 'secret_pass', 'georgi_dancheff'),
+(4, 'test', 'test', 'test@test.test'),
+(6, 'asd', 'asd', 'asd@asd.asd'),
+(7, 'asdd', 'asd', 'asd@asd.v');
 
 -- --------------------------------------------------------
 
@@ -120,7 +125,7 @@ ALTER TABLE `books`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
