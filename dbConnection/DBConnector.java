@@ -101,4 +101,44 @@ public class DBConnector {
 			return LogInResult.NO_SERVER_CONNECTION;
 		}
 	}
+	
+	//REGISTRATION........................................................
+	public enum RegistrationResult {
+		NO_SERVER_CONNECTION,
+		USERNAME_TAKEN,
+		REGISTERED,
+		SQL_ERROR
+	}
+	
+	public RegistrationResult register(String username, String password, String email) {
+		if(!this.isConnected) {
+			return RegistrationResult.NO_SERVER_CONNECTION;
+		}
+		 
+		try {
+			Statement statement = connection.createStatement();
+			String query = "SELECT id FROM users WHERE username = '" + username + "';";
+			ResultSet result = statement.executeQuery(query);
+			
+			//There is user with that username already
+			if( result.next() ) {
+				return RegistrationResult.USERNAME_TAKEN;
+			} 
+			
+			query = "INSERT INTO `users` (`id`, `username`, `password`, `email`) VALUES (NULL, '"+username+"', '"+password+"', '"+email+"');";
+			statement.executeUpdate(query);
+			
+			//Check if the user is actually registered
+			query = "SELECT id FROM users WHERE username = '" + username + "';";
+			result = statement.executeQuery(query);
+			if( result.next() ) {
+				User.logIn(result.getInt("id"), username, email);
+				return RegistrationResult.REGISTERED;
+			} 
+			else return RegistrationResult.SQL_ERROR;
+			
+		} catch (SQLException e) {
+			return RegistrationResult.NO_SERVER_CONNECTION;
+		}
+	}
 }
