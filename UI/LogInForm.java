@@ -1,16 +1,7 @@
 package ui;
 
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.*;
+import java.awt.event.*;
 
 import javax.swing.*;
 
@@ -97,7 +88,7 @@ public class LogInForm {
 	    window.add(btn_submit.getJButton());
 	    
 	    //Link to the Log-in form
-	    registrationLink = new JLabel("Already have an account? ");
+	    registrationLink = new JLabel("Don't have an account? ");
 	    registrationLink.setFont(Resources.Fonts.Forms.link);
 	    registrationLink.setForeground(Resources.Colors.white);
 	    Dimension linkSize = registrationLink.getPreferredSize();
@@ -187,13 +178,15 @@ public class LogInForm {
 		
 		//Submit button on click
 		btn_submit.getJButton().addActionListener(new ActionListener() {
+			DBConnector db = new DBConnector("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/library", "root", "");
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DBConnector db = new DBConnector("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/library", "root", "");
 				DBConnector.LogInResult result = db.logIn(tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
 				
-				if( tf_username.getJTextField().getText().equals("") || tf_password.getJTextField().getText().equals("") ) {
+				if( tf_username.getJTextField().getText().equals("Username") || tf_password.getJTextField().getText().equals("Password") ) {
 					throwErrorMessage("Enter username and password ");
+					return;
 				}
 				else if( result == DBConnector.LogInResult.NO_SERVER_CONNECTION ) {
 					throwErrorMessage("No connection with the server ");
