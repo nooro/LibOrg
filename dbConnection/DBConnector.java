@@ -27,6 +27,13 @@ public class DBConnector {
 	
 	public boolean isConnected() { return this.isConnected; }
 	
+	public void closeConnection() { 
+		try {
+			this.connection.close();
+		} catch (SQLException e) {}
+	}
+	
+	//SEARCH.......................................
 	public List<Book> search(String searchString) {
 		Statement statement;
 		String [] splittedSearchString = searchString.split(" ");
@@ -64,7 +71,18 @@ public class DBConnector {
 		}
 	}
 	
-	public void logIn(String username, String password) {
+	//LOG IN....................................................
+	public enum LogInResult {
+		NO_SERVER_CONNECTION,
+		INVALID_DATA,
+		LOGGED_IN
+	}
+	
+	public LogInResult logIn(String username, String password) {
+		if(!this.isConnected) {
+			return LogInResult.NO_SERVER_CONNECTION;
+		}
+
 		try {
 			Statement statement = connection.createStatement();
 			String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "';";
@@ -73,13 +91,14 @@ public class DBConnector {
 			//There is user with that username and password
 			if( result.next() ) {
 				User.logIn(result.getInt("id"), result.getString("username"), result.getString("email"));
+				return LogInResult.LOGGED_IN;
 			} else {
 				User.logOut();
+				return LogInResult.INVALID_DATA;
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
+			return LogInResult.NO_SERVER_CONNECTION;
 		}
 	}
-	
 }
