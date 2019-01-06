@@ -284,8 +284,8 @@ public class RegistrationForm {
 				}
 				else if(result == DBConnector.RegistrationResult.REGISTERED) {
 					db.closeConnection();
-					LibraryOrganizer liborg = new LibraryOrganizer();
 					window.setVisible(false);
+					LibraryOrganizer liborg = new LibraryOrganizer();
 				}
 			}
 		});

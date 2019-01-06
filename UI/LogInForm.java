@@ -206,8 +206,8 @@ public class LogInForm {
 		registrationLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				RegistrationForm registrationForm = new RegistrationForm();
 				window.setVisible(false);
+				RegistrationForm registrationForm = new RegistrationForm();
 	        }
 		});
 	}
