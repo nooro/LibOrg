@@ -24,7 +24,7 @@ public class Button {
 	}
 	
 	public Dimension getSize() {
-		return this.size;
+		return this.button.getBounds().getSize();
 	}
 	
 	public JButton getJButton() {
