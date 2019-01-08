@@ -5,12 +5,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import liborg.Book;
-import liborg.User;
 
 public class DBConnector {
 	
 	private Connection connection;
-	
 	private boolean isConnected;
 	
 	public DBConnector(String dbDriver, String url, String user, String password) {
@@ -18,28 +16,11 @@ public class DBConnector {
 			Class.forName(dbDriver);
 			connection = DriverManager.getConnection(url, user, password);
 			this.isConnected = true;
-		} catch (ClassNotFoundException e) {
-			this.isConnected = false;
-		} catch (SQLException e) {
-			this.isConnected = false;
-		}
-	}
-	
-	public enum Result {
-		NO_SERVER_CONNECTION,
-		SQL_ERROR,
-
-		LOG_IN_INVALID_DATA,
-		LOGGED_IN,
+		} 
+		catch (ClassNotFoundException | SQLException e) { 
+			this.isConnected = false; 
+		} 
 		
-		REGISTER_USERNAME_TAKEN,
-		REGISTERED,
-		
-		NEW_BOOK_IS_ADDED,
-		AMOUNT_IS_CHANGED,
-		
-		BOOK_IS_REMOVED,
-		INVALID_BOOK_ID
 	}
 	
 	public boolean isConnected() { return this.isConnected; }
@@ -83,7 +64,6 @@ public class DBConnector {
 			return books;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return null;
 		}
 	}

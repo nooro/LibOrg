@@ -1,16 +1,15 @@
 package dbConnection;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-
+import java.sql.*;
 import liborg.User;
+import exceptions.*;
 
 public class UsersOperator {
 
-	public static DBConnector.Result logIn(DBConnector db, String username, String password) {
+	public static void logIn(DBConnector db, String username, String password) throws NoServerConnectionException, InvalidLogInDataException {
+		
 		if(!db.isConnected()) {
-			return DBConnector.Result.NO_SERVER_CONNECTION;
+			throw new NoServerConnectionException();
 		}
 
 		try {
@@ -21,20 +20,22 @@ public class UsersOperator {
 			//There is user with that username and password
 			if( result.next() ) {
 				User.logIn(result.getInt("id"), result.getString("username"), result.getString("email"), result.getBoolean("is_admin"));
-				return DBConnector.Result.LOGGED_IN;
 			} else {
 				User.logOut();
-				return DBConnector.Result.LOG_IN_INVALID_DATA;
+				throw new InvalidLogInDataException();
 			}
 			
 		} catch (SQLException e) {
-			return DBConnector.Result.SQL_ERROR;
+			throw new NoServerConnectionException();
 		}
+		
 	}
+	
 
-	public static DBConnector.Result register(DBConnector db, String username, String password, String email) {
+	public static void register(DBConnector db, String username, String password, String email) throws NoServerConnectionException, UsernameIsTakenException {
+		
 		if(!db.isConnected()) {
-			return DBConnector.Result.NO_SERVER_CONNECTION;
+			throw new NoServerConnectionException();
 		}
 		 
 		try {
@@ -44,7 +45,7 @@ public class UsersOperator {
 			
 			//There is user with that username already
 			if( result.next() ) {
-				return DBConnector.Result.REGISTER_USERNAME_TAKEN;
+				throw new UsernameIsTakenException();
 			} 
 			
 			query = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_admin`) VALUES (NULL, '"+username+"', '"+password+"', '"+email+"', '0');";
@@ -55,12 +56,12 @@ public class UsersOperator {
 			result = statement.executeQuery(query);
 			if( result.next() ) {
 				User.logIn(result.getInt("id"), username, email, false);
-				return DBConnector.Result.REGISTERED;
 			} 
-			else return DBConnector.Result.SQL_ERROR;
+			else throw new NoServerConnectionException();
 			
 		} catch (SQLException e) {
-			return DBConnector.Result.NO_SERVER_CONNECTION;
+			throw new NoServerConnectionException();
 		}
 	}
+	
 }

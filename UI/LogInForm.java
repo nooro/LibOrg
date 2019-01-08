@@ -6,6 +6,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import dbConnection.*;
+import exceptions.*;
 
 public class LogInForm {
 	private JFrame window;
@@ -105,7 +106,7 @@ public class LogInForm {
 	    window.add(errorMessage);
 	}
 	
-	private void throwErrorMessage(String message) {
+	private void showErrorMessage(String message) {
 		errorMessage.setText(message);
 		Dimension errorMessageSize = errorMessage.getPreferredSize();
 	    errorMessage.setBounds(window.getWidth()/2 - (int)errorMessageSize.getWidth()/2, 
@@ -182,23 +183,20 @@ public class LogInForm {
 		btn_submit.getJButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DBConnector.Result result = UsersOperator.logIn(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
 				
 				if( tf_username.getJTextField().getText().equals("Username") || tf_password.getJTextField().getText().equals("Password") ) {
-					throwErrorMessage("Enter username and password ");
+					showErrorMessage("Enter username and password ");
 					return;
 				}
-				else if( result == DBConnector.Result.NO_SERVER_CONNECTION ) {
-					throwErrorMessage("No connection with the server ");
-				}
-				else if( result == DBConnector.Result.LOG_IN_INVALID_DATA ) {
-					throwErrorMessage("Invalid username-password combination ");
-				}
-				else if( result == DBConnector.Result.LOGGED_IN ) {
+				
+				try {
+					UsersOperator.logIn(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
 					db.closeConnection();
-					LibraryOrganizer liborg = new LibraryOrganizer();
+					new LibraryOrganizer();
 					window.setVisible(false);
-				}
+				} 
+				catch (NoServerConnectionException exception) { showErrorMessage(exception.getMessage()); } 
+				catch (InvalidLogInDataException exception) { showErrorMessage(exception.getMessage()); }
 			}
 		});
 		
@@ -206,7 +204,7 @@ public class LogInForm {
 		registrationLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				RegistrationForm registrationForm = new RegistrationForm(db);
+				new RegistrationForm(db);
 				window.setVisible(false);
 	        }
 		});

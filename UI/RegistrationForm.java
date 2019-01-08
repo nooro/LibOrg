@@ -3,11 +3,10 @@ package ui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.regex.*;
-
 import javax.swing.*;
 
 import dbConnection.*;
-import liborg.User;
+import exceptions.*;
 
 public class RegistrationForm {
 	private JFrame window;
@@ -127,7 +126,7 @@ public class RegistrationForm {
 	    window.add(errorMessage);
 	}
 	
-	private void throwErrorMessage(String message) {
+	private void showErrorMessage(String message) {
 		errorMessage.setText(message);
 		Dimension errorMessageSize = errorMessage.getPreferredSize();
 	    errorMessage.setBounds(window.getWidth()/2 - (int)errorMessageSize.getWidth()/2, 
@@ -148,12 +147,6 @@ public class RegistrationForm {
 		
 		//Link hover effects
 		loginLink.addMouseListener(new MouseAdapter() {
-			@Override
-	        public void mouseClicked(MouseEvent e) {
-				LogInForm loginForm = new LogInForm(db);
-				window.setVisible(false);
-	        }
-
 	        @Override
 	        public void mouseEntered(MouseEvent e) {
 	            loginLink.setForeground(Resources.Colors.orange);
@@ -257,38 +250,30 @@ public class RegistrationForm {
 				if(tf_username.getJTextField().getText().equals("Username") || tf_password.getJTextField().getText().equals("Password") ||
 					tf_password_repetition.getJTextField().getText().equals("Password") || tf_email.getJTextField().getText().equals("E-mail")
 					) {
-					throwErrorMessage("Fill all input boxes ");
+					showErrorMessage("Fill all input boxes ");
 					return;
 				}
 				
 				//Check if the passwords are the same
 				else if(!tf_password.getJTextField().getText().equals(tf_password_repetition.getJTextField().getText())) {
-					throwErrorMessage("Repeat the password correctly ");
+					showErrorMessage("Repeat the password correctly ");
 					return;
 				}
 				
 				//Check if the e-mail is valid
 				else if(!emailValidationMatcher.matches()) {
-					throwErrorMessage("Enter valid e-mail address ");
+					showErrorMessage("Enter valid e-mail address ");
 					return;
 				}
 				
-				DBConnector.Result result = UsersOperator.register(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
-				
-				if(result == DBConnector.Result.NO_SERVER_CONNECTION) {
-					throwErrorMessage("No server connection ");
-				}
-				else if(result == DBConnector.Result.REGISTER_USERNAME_TAKEN) {
-					throwErrorMessage("This username already exists ");
-				}
-				else if(result == DBConnector.Result.SQL_ERROR) {
-					throwErrorMessage("SQL error ");
-				}
-				else if(result == DBConnector.Result.REGISTERED) {
+				try {
+					UsersOperator.register(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
 					db.closeConnection();
-					LibraryOrganizer liborg = new LibraryOrganizer();
+					new LibraryOrganizer();
 					window.setVisible(false);
-				}
+				} 
+				catch (NoServerConnectionException exception) { showErrorMessage(exception.getMessage()); } 
+				catch (UsernameIsTakenException exception) { showErrorMessage(exception.getMessage()); } 
 			}
 		});
 
@@ -296,7 +281,7 @@ public class RegistrationForm {
 		loginLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				LogInForm loginForm = new LogInForm(db);
+				new LogInForm(db);
 				window.setVisible(false);
 	        }
 		});
