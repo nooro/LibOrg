@@ -103,7 +103,7 @@ public class RegistrationForm {
 
 	    //Set up the submit button
 	    btn_submit = new Button("REGISTER", Resources.Fonts.Forms.button, Resources.Colors.white, Resources.Colors.orange);
-	    btn_submit.getJButton().setSize((int) (btn_submit.getSize().width * 1.2), btn_submit.getSize().height*2);
+	    btn_submit.getJButton().setSize((int) (btn_submit.getJButton().getPreferredSize().width * 1.2), btn_submit.getJButton().getPreferredSize().height*2);
 	    btn_submit.getJButton().setLocation( (int) (window.getWidth()/2 - btn_submit.getJButton().getSize().width/2), 
 	    									(int)( (tf_email.getJTextField().getBounds().y + tf_email.getJTextField().getBounds().height) + (window.getHeight()*0.03)) );
 	    window.add(btn_submit.getJButton());
@@ -271,21 +271,21 @@ public class RegistrationForm {
 					return;
 				}
 				
-				DBConnector.RegistrationResult result = db.register(tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
+				DBConnector.Result result = db.register(tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
 				
-				if(result == DBConnector.RegistrationResult.NO_SERVER_CONNECTION) {
+				if(result == DBConnector.Result.NO_SERVER_CONNECTION) {
 					throwErrorMessage("No server connection ");
 				}
-				else if(result == DBConnector.RegistrationResult.USERNAME_TAKEN) {
+				else if(result == DBConnector.Result.REGISTER_USERNAME_TAKEN) {
 					throwErrorMessage("This username already exists ");
 				}
-				else if(result == DBConnector.RegistrationResult.SQL_ERROR) {
+				else if(result == DBConnector.Result.SQL_ERROR) {
 					throwErrorMessage("SQL error ");
 				}
-				else if(result == DBConnector.RegistrationResult.REGISTERED) {
+				else if(result == DBConnector.Result.REGISTERED) {
 					db.closeConnection();
-					window.setVisible(false);
 					LibraryOrganizer liborg = new LibraryOrganizer();
+					window.setVisible(false);
 				}
 			}
 		});
@@ -294,8 +294,8 @@ public class RegistrationForm {
 		loginLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				window.setVisible(false);
 				LogInForm loginForm = new LogInForm();
+				window.setVisible(false);
 	        }
 		});
 	}

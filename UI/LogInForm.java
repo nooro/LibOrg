@@ -82,8 +82,8 @@ public class LogInForm {
 	    
 	    //Set up the submit button
 	    btn_submit = new Button("LOG IN", Resources.Fonts.Forms.button, Resources.Colors.white, Resources.Colors.orange);
-	    btn_submit.getJButton().setSize((int) (btn_submit.getSize().width * 1.2), btn_submit.getSize().height*2);
-	    btn_submit.getJButton().setLocation( (int) (window.getWidth()/2 - btn_submit.getJButton().getSize().width/2), 
+	    btn_submit.getJButton().setSize((int) (btn_submit.getJButton().getPreferredSize().width * 1.2), btn_submit.getJButton().getPreferredSize().height*2);
+	    btn_submit.getJButton().setLocation( (int) (window.getWidth()/2 - btn_submit.getSize().width/2), 
 	    									(int)( (tf_password.getJTextField().getBounds().y + tf_password.getJTextField().getBounds().height) + (window.getHeight()*0.03)) );
 	    window.add(btn_submit.getJButton());
 	    
@@ -182,19 +182,19 @@ public class LogInForm {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DBConnector.LogInResult result = db.logIn(tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
+				DBConnector.Result result = db.logIn(tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
 				
 				if( tf_username.getJTextField().getText().equals("Username") || tf_password.getJTextField().getText().equals("Password") ) {
 					throwErrorMessage("Enter username and password ");
 					return;
 				}
-				else if( result == DBConnector.LogInResult.NO_SERVER_CONNECTION ) {
+				else if( result == DBConnector.Result.NO_SERVER_CONNECTION ) {
 					throwErrorMessage("No connection with the server ");
 				}
-				else if( result == DBConnector.LogInResult.INVALID_DATA ) {
+				else if( result == DBConnector.Result.LOG_IN_INVALID_DATA ) {
 					throwErrorMessage("Invalid username-password combination ");
 				}
-				else if( result == DBConnector.LogInResult.LOGGED_IN ) {
+				else if( result == DBConnector.Result.LOGGED_IN ) {
 					db.closeConnection();
 					LibraryOrganizer liborg = new LibraryOrganizer();
 					window.setVisible(false);
@@ -206,8 +206,8 @@ public class LogInForm {
 		registrationLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				window.setVisible(false);
 				RegistrationForm registrationForm = new RegistrationForm();
+				window.setVisible(false);
 	        }
 		});
 	}
