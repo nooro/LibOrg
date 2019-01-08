@@ -5,8 +5,7 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
-import dbConnection.DBConnector;
-import liborg.User;
+import dbConnection.*;
 
 public class LogInForm {
 	private JFrame window;
@@ -17,7 +16,9 @@ public class LogInForm {
 	private JLabel registrationLink;
 	private JLabel errorMessage;
 	
-	public LogInForm() {
+	private DBConnector db;
+	
+	public LogInForm(DBConnector dbConnector) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -25,6 +26,7 @@ public class LogInForm {
 				Resources.Fonts.Forms.setUp(window);
 				setupTheBody();
 				setUpEffects();
+				db = dbConnector;
 				handleEvents();
 		}});
 	}
@@ -178,11 +180,9 @@ public class LogInForm {
 		
 		//Submit button on click
 		btn_submit.getJButton().addActionListener(new ActionListener() {
-			DBConnector db = new DBConnector("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/library", "root", "");
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DBConnector.Result result = db.logIn(tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
+				DBConnector.Result result = UsersOperator.logIn(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
 				
 				if( tf_username.getJTextField().getText().equals("Username") || tf_password.getJTextField().getText().equals("Password") ) {
 					throwErrorMessage("Enter username and password ");
@@ -206,7 +206,7 @@ public class LogInForm {
 		registrationLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				RegistrationForm registrationForm = new RegistrationForm();
+				RegistrationForm registrationForm = new RegistrationForm(db);
 				window.setVisible(false);
 	        }
 		});

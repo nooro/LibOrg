@@ -6,7 +6,7 @@ import java.util.regex.*;
 
 import javax.swing.*;
 
-import dbConnection.DBConnector;
+import dbConnection.*;
 import liborg.User;
 
 public class RegistrationForm {
@@ -20,7 +20,9 @@ public class RegistrationForm {
 	private JLabel loginLink;
 	private JLabel errorMessage;
 	
-	public RegistrationForm() {
+	private DBConnector db;
+	
+	public RegistrationForm(DBConnector dbConnector) {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -28,6 +30,7 @@ public class RegistrationForm {
 				Resources.Fonts.Forms.setUp(window);
 				setupTheBody();
 				setUpEffects();
+				db = dbConnector;
 				handleEvents();
 		}});	
 	}
@@ -147,7 +150,7 @@ public class RegistrationForm {
 		loginLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				LogInForm loginForm = new LogInForm();
+				LogInForm loginForm = new LogInForm(db);
 				window.setVisible(false);
 	        }
 
@@ -241,7 +244,6 @@ public class RegistrationForm {
 		
 		//Submit button on click
 		btn_submit.getJButton().addActionListener(new ActionListener() {
-			DBConnector db = new DBConnector("com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/library", "root", "");
 			
 			Pattern emailValidationPattern = Pattern.compile("[a-zA-Z0-9_.-]+@[a-zA-Z0-9_-]+.[a-z]+");
 			Matcher emailValidationMatcher;
@@ -271,7 +273,7 @@ public class RegistrationForm {
 					return;
 				}
 				
-				DBConnector.Result result = db.register(tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
+				DBConnector.Result result = UsersOperator.register(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
 				
 				if(result == DBConnector.Result.NO_SERVER_CONNECTION) {
 					throwErrorMessage("No server connection ");
@@ -294,7 +296,7 @@ public class RegistrationForm {
 		loginLink.addMouseListener(new MouseAdapter() {
 			@Override
 	        public void mouseClicked(MouseEvent e) {
-				LogInForm loginForm = new LogInForm();
+				LogInForm loginForm = new LogInForm(db);
 				window.setVisible(false);
 	        }
 		});
