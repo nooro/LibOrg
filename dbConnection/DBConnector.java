@@ -4,26 +4,24 @@ import java.sql.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import exceptions.NoServerConnectionException;
 import liborg.Book;
 
 public class DBConnector {
 	
 	private Connection connection;
-	private boolean isConnected;
 	
-	public DBConnector(String dbDriver, String url, String user, String password) {
+	public DBConnector(String dbDriver, String url, String user, String password) throws NoServerConnectionException {
 		try {
 			Class.forName(dbDriver);
 			connection = DriverManager.getConnection(url, user, password);
-			this.isConnected = true;
 		} 
-		catch (ClassNotFoundException | SQLException e) { 
-			this.isConnected = false; 
+		catch (ClassNotFoundException | SQLException e) {
+			throw new NoServerConnectionException();
 		} 
 		
 	}
 	
-	public boolean isConnected() { return this.isConnected; }
 	public Connection getConnection () { return this.connection; }
 	
 	public void closeConnection() { 
@@ -33,7 +31,7 @@ public class DBConnector {
 	}
 	
 	
-	public List<Book> search(String searchString) {
+	public List<Book> search(String searchString) throws NoServerConnectionException {
 		Statement statement;
 		String [] splittedSearchString = searchString.split(" ");
 		
@@ -64,7 +62,7 @@ public class DBConnector {
 			return books;
 			
 		} catch (SQLException e) {
-			return null;
+			throw new NoServerConnectionException();
 		}
 	}
 }

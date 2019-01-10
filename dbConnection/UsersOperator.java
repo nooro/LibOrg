@@ -8,10 +8,6 @@ public class UsersOperator {
 
 	public static void logIn(DBConnector db, String username, String password) throws NoServerConnectionException, InvalidLogInDataException {
 		
-		if(!db.isConnected()) {
-			throw new NoServerConnectionException();
-		}
-
 		try {
 			Statement statement = db.getConnection().createStatement();
 			String query = "SELECT * FROM users WHERE username = '" + username + "' AND password = '" + password + "';";
@@ -34,10 +30,6 @@ public class UsersOperator {
 
 	public static void register(DBConnector db, String username, String password, String email) throws NoServerConnectionException, UsernameIsTakenException {
 		
-		if(!db.isConnected()) {
-			throw new NoServerConnectionException();
-		}
-		 
 		try {
 			Statement statement = db.getConnection().createStatement();
 			String query = "SELECT id FROM users WHERE username = '" + username + "';";
