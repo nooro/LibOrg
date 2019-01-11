@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import dbConnection.*;
 import exceptions.*;
+import liborg.Password;
 
 public class RegistrationForm {
 	private JFrame window;
@@ -267,9 +268,8 @@ public class RegistrationForm {
 				}
 				
 				try {
-					UsersOperator.register(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText(), tf_email.getJTextField().getText());
-					db.closeConnection();
-					new LibraryOrganizer();
+					UsersOperator.register(db, tf_username.getJTextField().getText(), Password.crypt(tf_password.getJTextField().getText()), tf_email.getJTextField().getText());
+					new LibraryOrganizer(db);
 					window.setVisible(false);
 				} 
 				catch (NoServerConnectionException exception) { showErrorMessage(exception.getMessage()); } 

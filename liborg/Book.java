@@ -50,4 +50,8 @@ public class Book {
 	public void setAmount( int amount ) { this.amount = amount; }
 	public void setID( int id ) { this.id = id; }
 	
+	public String toString() {
+		return this.id + " | " + this.author + " | " + this.title + " | " + this.genre + " | " + this.publishingYear + " | " + this.pages + " | " + this.amount; 
+	}
+	
 }

@@ -58,7 +58,7 @@ public class BooksOperator {
 					statement.executeUpdate(query);
 				}
 			}
-			else throw new InvalidIDException("There is no book with id " + id);
+			else throw new InvalidIDException("There is no book with id " + id + " ");
 			
 		}catch(SQLException e) {
 			throw new NoServerConnectionException();
@@ -125,7 +125,7 @@ public class BooksOperator {
 	}
 	
 	
-	public static void returnBook(DBConnector db, String username, int bookID) throws NoServerConnectionException, NoSuchUserException, NoSuchBookException {
+	public static void returnBook(DBConnector db, String username, int bookID) throws NoServerConnectionException, NoSuchUserException, NoSuchBookException, BookNotTakenException {
 		try {
 			Statement statement = db.getConnection().createStatement();
 			String query = "SELECT id FROM users WHERE username = '"+username+"';";
@@ -147,6 +147,7 @@ public class BooksOperator {
 						query = "UPDATE `books` SET `amount` = '"+(booksAmount+deletedRows)+"' WHERE `books`.`id` = "+bookID+";";
 						statement.executeUpdate(query);
 					}
+					else throw new BookNotTakenException();
 				} else throw new NoSuchBookException();
 				
 			} else throw new NoSuchUserException();
@@ -155,24 +156,5 @@ public class BooksOperator {
 			throw new NoServerConnectionException();
 		}
 	}
-	
-	public static boolean isBookAvailable(DBConnector db, int bookID) throws NoSuchBookException, NoServerConnectionException {
-		try {
-			Statement statement = db.getConnection().createStatement();
-			String query = "SELECT amount FROM books WHERE id = '"+bookID+"';";
-			ResultSet result = statement.executeQuery(query);
-			
-			if(result.next()) {
-				int amount = result.getInt("amount");
-				
-				if(amount > 0) {
-					return true;
-				} else return false;
-				
-			} else throw new NoSuchBookException();
-				
-		}catch(SQLException e) {
-			throw new NoServerConnectionException();
-		}
-	}
+
 }

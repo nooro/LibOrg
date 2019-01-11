@@ -7,6 +7,7 @@ import javax.swing.*;
 
 import dbConnection.*;
 import exceptions.*;
+import liborg.Password;
 
 public class LogInForm {
 	private JFrame window;
@@ -190,9 +191,8 @@ public class LogInForm {
 				}
 				
 				try {
-					UsersOperator.logIn(db, tf_username.getJTextField().getText(), tf_password.getJTextField().getText());
-					db.closeConnection();
-					new LibraryOrganizer();
+					UsersOperator.logIn( db, tf_username.getJTextField().getText(), Password.crypt( tf_password.getJTextField().getText() ) );
+					new LibraryOrganizer(db);
 					window.setVisible(false);
 				} 
 				catch (NoServerConnectionException exception) { showErrorMessage(exception.getMessage()); } 

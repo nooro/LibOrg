@@ -30,11 +30,21 @@ public class Resources {
 		public static class LibraryOrganizer {
 			public static Font logOut;
 			public static Font buttons;
+			public static Font panelTitles;
+			public static Font inputFields;
+			public static Font panelButtons;
+			public static Font errorMessages;
+			public static Font takenBooks;
 			
 			public static void setUp(JFrame window) {
 				if(logOut == null) {
 					logOut = new Font("Tahoma", Font.ITALIC, window.getWidth()/100);
 					buttons = new Font("Tahoma", Font.BOLD, window.getWidth()/105);
+					panelButtons = new Font("Tahoma", Font.BOLD, window.getWidth()/85);
+					panelTitles = new Font("Tahoma", Font.BOLD, window.getWidth()/70);
+					inputFields = new Font("Tahoma", Font.ITALIC, window.getWidth()/80);
+					errorMessages = new Font("Tahoma", Font.ITALIC, window.getWidth()/90);
+					takenBooks = new Font("Tahoma", Font.BOLD, window.getWidth()/100);
 				}
 			}
 		}
