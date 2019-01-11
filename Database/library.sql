@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time:  4 яну 2019 в 22:05
+-- Generation Time: 11 яну 2019 в 04:46
 -- Версия на сървъра: 10.1.37-MariaDB
 -- PHP Version: 7.2.12
 
@@ -45,9 +45,12 @@ CREATE TABLE `books` (
 --
 
 INSERT INTO `books` (`id`, `title`, `author`, `genre`, `publishing_year`, `pages`, `amount`) VALUES
-(1, 'The amazing Maurice and his educated rodents', 'Terry Pratchett', 'Фентъзи', 2001, 270, 1),
-(2, 'Going postal', 'Terry Pratchett', 'Фентъзи', 2004, 267, 1),
-(3, 'The color of magic', 'Terry Pratchett', 'Фентъзи', 1983, 167, 1);
+(1, 'The amazing Maurice and his educated rodents', 'Terry Pratchett', 'Fantasy', 2001, 270, 2),
+(2, 'Going postal', 'Terry Pratchett', 'Fantasy', 2004, 267, 0),
+(3, 'The color of magic', 'Terry Pratchett', 'Fantasy', 1983, 167, 7),
+(5, 'It', 'Stephen King', 'Horror', 1986, 760, 1),
+(10, 'The outsider', 'Stephen King', 'Thriller', 2018, 360, 1),
+(11, 'RandomTitle', 'Noone', 'Trash', 2008, 123, 0);
 
 -- --------------------------------------------------------
 
@@ -59,20 +62,20 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` text NOT NULL,
   `password` text NOT NULL,
-  `email` text NOT NULL
+  `email` text NOT NULL,
+  `is_admin` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Схема на данните от таблица `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `email`) VALUES
-(1, 'Dancheff', 'pass', 'georgi.dancheff@gmail.com'),
-(2, 'Georgi', 'secret', 'georgi_danchev@abv.bg'),
-(3, 'nooro', 'secret_pass', 'georgi_dancheff'),
-(4, 'test', 'test', 'test@test.test'),
-(6, 'asd', 'asd', 'asd@asd.asd'),
-(7, 'asdd', 'asd', 'asd@asd.v');
+INSERT INTO `users` (`id`, `username`, `password`, `email`, `is_admin`) VALUES
+(1, 'Dancheff', 'SECURED@pass', 'georgi.dancheff@gmail.com', 0),
+(2, 'Georgi', 'SECURED@secret', 'georgi_danchev@abv.bg', 0),
+(3, 'nooro', 'SECURED@pass', 'noor@smwr.com', 1),
+(13, 'ggr', 'SECURED@asd', 'asd@asd.asd', 0),
+(14, 'bobo', 'SECURED@asd', 'asd@asd.asd', 0);
 
 -- --------------------------------------------------------
 
@@ -84,16 +87,15 @@ CREATE TABLE `users_books` (
   `user_id` int(11) NOT NULL,
   `book_id` int(11) NOT NULL,
   `take_date` date NOT NULL,
-  `return_date` date NOT NULL,
-  `is_returned` tinyint(1) NOT NULL
+  `return_date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Схема на данните от таблица `users_books`
 --
 
-INSERT INTO `users_books` (`user_id`, `book_id`, `take_date`, `return_date`, `is_returned`) VALUES
-(1, 1, '2018-12-20', '2018-12-22', 0);
+INSERT INTO `users_books` (`user_id`, `book_id`, `take_date`, `return_date`) VALUES
+(1, 11, '2019-01-11', '2019-02-11');
 
 --
 -- Indexes for dumped tables
@@ -119,13 +121,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `books`
 --
 ALTER TABLE `books`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
